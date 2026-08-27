@@ -1,0 +1,88 @@
+-- Tabela Clientes
+CREATE TABLE clientes (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    cpf VARCHAR(11) UNIQUE NOT NULL,
+    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabela Categorias
+CREATE TABLE categorias (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(50) UNIQUE NOT NULL
+);
+
+-- Tabela Produtos
+CREATE TABLE produtos (
+    id SERIAL PRIMARY KEY,
+    categoria_id INT NOT NULL,
+    nome VARCHAR(100) NOT NULL,
+    preco NUMERIC(10, 2) NOT NULL CHECK (preco > 0),
+    quantidade_estoque INT NOT NULL DEFAULT 0 CHECK (quantidade_estoque >= 0),
+    
+    CONSTRAINT fk_produto_categoria 
+        FOREIGN KEY (categoria_id) 
+        REFERENCES categorias(id) 
+        ON DELETE RESTRICT
+);
+
+-- Tabela Pedidos
+CREATE TABLE pedidos (
+    id SERIAL PRIMARY KEY,
+    cliente_id INT NOT NULL,
+    data_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) DEFAULT 'Pendente' CHECK (status IN ('Pendente', 'Pago', 'Enviado', 'Cancelado')),
+    
+    CONSTRAINT fk_pedido_cliente 
+        FOREIGN KEY (cliente_id) 
+        REFERENCES clientes(id) 
+        ON DELETE CASCADE
+);
+
+-- Tabela Associativa Itens_Pedido (N:N)
+CREATE TABLE itens_pedido (
+    pedido_id INT NOT NULL,
+    produto_id INT NOT NULL,
+    quantidade INT NOT NULL CHECK (quantidade > 0),
+    preco_unitario NUMERIC(10, 2) NOT NULL CHECK (preco_unitario > 0),
+    
+    PRIMARY KEY (pedido_id, produto_id),
+    CONSTRAINT fk_item_pedido FOREIGN KEY (pedido_id) REFERENCES pedidos(id) ON DELETE CASCADE,
+    CONSTRAINT fk_item_produto FOREIGN KEY (produto_id) REFERENCES produtos(id) ON DELETE RESTRICT
+);
+
+-- Inserindo Categorias
+INSERT INTO categorias (nome) VALUES 
+('Informática'),
+('Comida'),
+('Roupas');
+
+-- Inserindo Produtos
+INSERT INTO produtos (categoria_id, nome, preco, quantidade_estoque) VALUES 
+(1, 'Mouse Gamer Redragon', 150.00, 25),
+(1, 'Teclado Mecânico Logitech', 350.00, 8),
+(2, 'Batata kg', 20.00, 50),
+(2, 'Cenoura kg', 15.00, 40),
+(3, 'Blusa', 30.00, 15);
+
+-- Inserindo Clientes
+INSERT INTO clientes (nome, email, cpf) VALUES 
+('Manuela', 'manuela@email.com', '12345678910'),
+('Gabriel', 'gabriel@email.com', '12345678911'),
+('Laura', 'laura@email.com', '12345678912');
+
+-- Inserindo Pedidos
+INSERT INTO pedidos (cliente_id, status) VALUES 
+(1, 'Pago'),
+(1, 'Pendente'),
+(1, 'Enviado'),
+(1, 'Cancelado'),
+(2, 'Pago'),
+(2, 'Pendente'),
+(2, 'Enviado'),
+(2, 'Cancelado'),
+(3, 'Pago'),
+(3, 'Pendente'),
+(3, 'Enviado'),
+(3, 'Cancelado');
