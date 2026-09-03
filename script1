@@ -116,7 +116,7 @@ SELECT
     ped.status
 FROM pedidos ped
 INNER JOIN clientes cli ON ped.cliente_id = cli.id
-WHERE cli.nome = 'Paulo Antunes';
+WHERE cli.nome = 'Manuela';
 
 -- Q3: Calcular o valor total de cada pedido
 SELECT 
