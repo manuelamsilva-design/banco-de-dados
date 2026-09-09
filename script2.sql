@@ -68,7 +68,7 @@ SELECT
     e.nome AS especialidade,
     m.valor_consulta
 FROM medicos m
-INNER JOIN especialidades e ON m.especialidade_id = e.id
+JOIN especialidades e ON m.especialidade_id = e.id
 ORDER BY m.valor_consulta DESC;
 
 SELECT 
@@ -78,9 +78,9 @@ SELECT
     e.nome AS especialidade,
     c.status
 FROM consultas c
-INNER JOIN pacientes p ON c.paciente_id = p.id
-INNER JOIN medicos m ON c.medico_id = m.id
-INNER JOIN especialidades e ON m.especialidade_id = e.id
+JOIN pacientes p ON c.paciente_id = p.id
+JOIN medicos m ON c.medico_id = m.id
+JOIN especialidades e ON m.especialidade_id = e.id
 WHERE p.nome = 'Aline Urbano'
 ORDER BY c.data_hora ASC;
 
@@ -92,8 +92,8 @@ SELECT
     COALESCE(SUM(ex.valor_exame), 0.00) AS total_exames,
     (m.valor_consulta + COALESCE(SUM(ex.valor_exame), 0.00)) AS valor_total_atendimento
 FROM consultas c
-INNER JOIN pacientes p ON c.paciente_id = p.id
-INNER JOIN medicos m ON c.medico_id = m.id
+JOIN pacientes p ON c.paciente_id = p.id
+JOIN medicos m ON c.medico_id = m.id
 LEFT JOIN exames_consulta ex ON c.id = ex.consulta_id
 GROUP BY c.id, p.nome, m.nome, m.valor_consulta
 ORDER BY c.id;
@@ -104,7 +104,7 @@ SELECT
     e.nome AS especialidade,
     m.valor_consulta
 FROM medicos m
-INNER JOIN especialidades e ON m.especialidade_id = e.id
+JOIN especialidades e ON m.especialidade_id = e.id
 WHERE m.valor_consulta > 300.00;
 
 SELECT 
@@ -112,7 +112,7 @@ SELECT
     COUNT(c.id) AS quantidade_consultas,
     COALESCE(SUM(m.valor_consulta), 0.00) AS faturamento_consultas
 FROM especialidades e
-INNER JOIN medicos m ON e.id = m.especialidade_id
+JOIN medicos m ON e.id = m.especialidade_id
 LEFT JOIN consultas c ON m.id = c.medico_id AND c.status = 'Realizada'
 GROUP BY e.id, e.nome
 ORDER BY faturamento_consultas DESC;
