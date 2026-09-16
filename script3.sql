@@ -67,6 +67,7 @@ INSERT INTO pecas_os (os_id, nome_peca, quantidade, valor_unitario) VALUES
 (2, 'Pastilha de Freio Dianteira', 1, 150.00),
 (4, 'Bateria 60Ah', 1, 420.00);
 
+CREATE VIEW vw_relacao1 as
 SELECT 
     v.marca,
     v.modelo,
@@ -78,6 +79,7 @@ FROM veiculos v
 JOIN clientes c ON v.cliente_id = c.id
 ORDER BY v.marca ASC, v.modelo ASC;
 
+CREATE VIEW vw_relacao2 as
 SELECT 
     os.id AS os_id,
     v.placa,
@@ -92,6 +94,7 @@ JOIN mecanicos m ON os.mecanico_id = m.id
 WHERE c.nome = 'Manuela'
 ORDER BY os.data_abertura DESC;
 
+CREATE VIEW vw_relacao3 as
 SELECT 
     os.id AS os_id,
     v.placa,
@@ -106,6 +109,7 @@ JOIN pecas_os p ON os.id = p.os_id
 GROUP BY os.id, v.placa, m.nome, os.valor_mao_obra
 ORDER BY os.id;
 
+CREATE VIEW vw_relacao4 as
 SELECT 
     nome AS mecanico,
     especialidade,
@@ -114,6 +118,7 @@ FROM mecanicos
 WHERE valor_hora > 90.00
 ORDER BY valor_hora DESC;
 
+CREATE VIEW vw_relacao5 as
 SELECT 
     m.especialidade,
     COUNT(os.id) AS qtd_servicos_concluidos,
