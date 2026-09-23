@@ -85,6 +85,7 @@ INSERT INTO pedidos (cliente_id, status) VALUES
 (2, 4, 3, 15.00), 
 (3, 5, 3, 30.00);
 
+CREATE VIEW vw_relacao1 as
 SELECT 
     p.nome AS produto,
     c.nome AS categoria,
@@ -94,6 +95,7 @@ FROM produtos p
 INNER JOIN categorias c ON p.categoria_id = c.id
 ORDER BY p.preco DESC;
 
+CREATE VIEW vw_relacao2 as
 SELECT 
     ped.id AS pedido_id,
     cli.nome AS cliente,
@@ -103,6 +105,7 @@ FROM pedidos ped
 INNER JOIN clientes cli ON ped.cliente_id = cli.id
 WHERE cli.nome = 'Manuela';
 
+CREATE VIEW vw_relacao3 as
 SELECT 
     ped.id AS pedido_id,
     cli.nome AS cliente,
@@ -113,6 +116,7 @@ INNER JOIN itens_pedido item ON ped.id = item.pedido_id
 GROUP BY ped.id, cli.nome
 ORDER BY ped.id;
 
+CREATE VIEW vw_relacao4 as
 SELECT 
     nome AS produto,
     quantidade_estoque
@@ -120,6 +124,7 @@ FROM produtos
 WHERE quantidade_estoque < 10
 ORDER BY quantidade_estoque ASC;
 
+CREATE VIEW vw_relacao5 as
 SELECT 
     cat.nome AS categoria,
     COALESCE(SUM(item.quantidade * item.preco_unitario), 0.00) AS total_faturado
