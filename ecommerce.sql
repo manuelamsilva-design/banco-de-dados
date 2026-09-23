@@ -1,4 +1,3 @@
--- Tabela Clientes
 CREATE TABLE clientes (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
@@ -7,13 +6,11 @@ CREATE TABLE clientes (
     data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabela Categorias
 CREATE TABLE categorias (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(50) UNIQUE NOT NULL
 );
 
--- Tabela Produtos
 CREATE TABLE produtos (
     id SERIAL PRIMARY KEY,
     categoria_id INT NOT NULL,
@@ -27,7 +24,6 @@ CREATE TABLE produtos (
         ON DELETE RESTRICT
 );
 
--- Tabela Pedidos
 CREATE TABLE pedidos (
     id SERIAL PRIMARY KEY,
     cliente_id INT NOT NULL,
@@ -40,7 +36,6 @@ CREATE TABLE pedidos (
         ON DELETE CASCADE
 );
 
--- Tabela Associativa Itens_Pedido (N:N)
 CREATE TABLE itens_pedido (
     pedido_id INT NOT NULL,
     produto_id INT NOT NULL,
@@ -52,13 +47,11 @@ CREATE TABLE itens_pedido (
     CONSTRAINT fk_item_produto FOREIGN KEY (produto_id) REFERENCES produtos(id) ON DELETE RESTRICT
 );
 
--- Inserindo Categorias
 INSERT INTO categorias (nome) VALUES 
 ('Informática'),
 ('Comida'),
 ('Roupas');
 
--- Inserindo Produtos
 INSERT INTO produtos (categoria_id, nome, preco, quantidade_estoque) VALUES 
 (1, 'Mouse Gamer Redragon', 150.00, 25),
 (1, 'Teclado Mecânico Logitech', 350.00, 8),
@@ -66,13 +59,11 @@ INSERT INTO produtos (categoria_id, nome, preco, quantidade_estoque) VALUES
 (2, 'Cenoura kg', 15.00, 40),
 (3, 'Blusa', 30.00, 15);
 
--- Inserindo Clientes
 INSERT INTO clientes (nome, email, cpf) VALUES 
 ('Manuela', 'manuela@email.com', '12345678910'),
 ('Gabriel', 'gabriel@email.com', '12345678911'),
 ('Laura', 'laura@email.com', '12345678912');
 
--- Inserindo Pedidos
 INSERT INTO pedidos (cliente_id, status) VALUES 
 (1, 'Pago'),
 (1, 'Pendente'),
@@ -87,18 +78,13 @@ INSERT INTO pedidos (cliente_id, status) VALUES
 (3, 'Enviado'),
 (3, 'Cancelado');
 
--- Inserindo Itens dos Pedidos
 -INSERT INTO itens_pedido (pedido_id, produto_id, quantidade, preco_unitario) VALUES 
--- Pedido 1
 (1, 1, 3, 150.00), 
 (1, 2, 3, 350.00), 
--- Pedido 2
 (2, 3, 3, 20.00),
 (2, 4, 3, 15.00), 
--- Pedido 3
 (3, 5, 3, 30.00);
 
--- Q1: Produtos ordenados do mais caro para o mais barato com o nome da categoria
 SELECT 
     p.nome AS produto,
     c.nome AS categoria,
@@ -108,7 +94,6 @@ FROM produtos p
 INNER JOIN categorias c ON p.categoria_id = c.id
 ORDER BY p.preco DESC;
 
--- Q2: Pedidos do cliente "Paulo Antunes"
 SELECT 
     ped.id AS pedido_id,
     cli.nome AS cliente,
@@ -118,7 +103,6 @@ FROM pedidos ped
 INNER JOIN clientes cli ON ped.cliente_id = cli.id
 WHERE cli.nome = 'Manuela';
 
--- Q3: Calcular o valor total de cada pedido
 SELECT 
     ped.id AS pedido_id,
     cli.nome AS cliente,
@@ -129,7 +113,6 @@ INNER JOIN itens_pedido item ON ped.id = item.pedido_id
 GROUP BY ped.id, cli.nome
 ORDER BY ped.id;
 
--- Q4: Produtos com estoque baixo (menos de 10 unidades)
 SELECT 
     nome AS produto,
     quantidade_estoque
@@ -137,7 +120,6 @@ FROM produtos
 WHERE quantidade_estoque < 10
 ORDER BY quantidade_estoque ASC;
 
--- Q5: Total faturado por categoria de produto
 SELECT 
     cat.nome AS categoria,
     COALESCE(SUM(item.quantidade * item.preco_unitario), 0.00) AS total_faturado
