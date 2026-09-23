@@ -62,6 +62,7 @@ INSERT INTO exames_consulta (consulta_id, nome_exame, valor_exame) VALUES
 (2, 'Hemograma Completo', 45.00),
 (3, 'Exame de Urina', 30.00);
 
+CREATE VIEW vw_relacao1 as
 SELECT 
     m.nome AS medico,
     m.crm,
@@ -71,6 +72,7 @@ FROM medicos m
 JOIN especialidades e ON m.especialidade_id = e.id
 ORDER BY m.valor_consulta DESC;
 
+CREATE VIEW vw_relacao2 as
 SELECT 
     c.id AS consulta_id,
     c.data_hora,
@@ -84,6 +86,7 @@ JOIN especialidades e ON m.especialidade_id = e.id
 WHERE p.nome = 'Aline Urbano'
 ORDER BY c.data_hora ASC;
 
+CREATE VIEW vw_relacao3 as
 SELECT 
     c.id AS consulta_id,
     p.nome AS paciente,
@@ -98,6 +101,7 @@ LEFT JOIN exames_consulta ex ON c.id = ex.consulta_id
 GROUP BY c.id, p.nome, m.nome, m.valor_consulta
 ORDER BY c.id;
 
+CREATE VIEW vw_relacao4 as
 SELECT 
     m.nome AS medico,
     m.crm,
@@ -107,6 +111,7 @@ FROM medicos m
 JOIN especialidades e ON m.especialidade_id = e.id
 WHERE m.valor_consulta > 300.00;
 
+CREATE VIEW vw_relacao5 as
 SELECT 
     e.nome AS especialidade,
     COUNT(c.id) AS quantidade_consultas,
